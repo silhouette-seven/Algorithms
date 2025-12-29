@@ -25,15 +25,16 @@ class BTree:
     def split_node(self,parent_node,index):
         node_to_be_splitted = parent_node.child_array[index]
         new_node = Node()
-        median = node_to_be_splitted.key_array[node_to_be_splitted.t]
+        new_node.leaf = node_to_be_splitted.leaf
+        median = node_to_be_splitted.key_array[node_to_be_splitted.t - 1]
         r = 0
         for i in range(node_to_be_splitted.t+1,2*node_to_be_splitted.t):
-            new_node.key_array[r] = node_to_be_splitted.key_array[i]
+            new_node.key_array[r] = node_to_be_splitted.key_array[i-1]
             r+=1
         r = 0
         if not(node_to_be_splitted.leaf):
             for j in range(node_to_be_splitted.t+1,2*node_to_be_splitted.t+1):
-                new_node.child_array[r] = node_to_be_splitted.child_array[j]
+                new_node.child_array[r] = node_to_be_splitted.child_array[j-1]
                 r+=1
         node_to_be_splitted.no_of_keys = node_to_be_splitted.t - 1
         for k in range(parent_node.no_of_nodes-1,index-1,-1):
@@ -41,8 +42,8 @@ class BTree:
         for l in range(parent_node.no_of_nodes,index,-1):
             parent_node.child_array[l+1] = parent_node.child_array[l]
         parent_node.key_array[index] = median
-        parent_node.child_array[i] = node_to_be_splitted
-        parent_node.child_array[i+1] = new_node
+        parent_node.child_array[index] = node_to_be_splitted
+        parent_node.child_array[index+1] = new_node
         # It has 2t - 1 elements
         
         
