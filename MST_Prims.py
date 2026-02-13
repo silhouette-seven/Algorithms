@@ -2,7 +2,7 @@ class TreeNode:
 
     def __init__(self,val,parent=None):
         self.val = val
-        self.parent = parent
+        self.parent = self
 
 
 
@@ -11,16 +11,20 @@ class DisjointSetNode:
     def __init__(self,initial_value):
         self.root = TreeNode(initial_value)
 
+def path_compression_heuristic(current_node):
+    if current_node.parent != current_node:
+        current_node.parent = path_compression_heuristic(current_node.parent)
+    return current_node.parent
 def get_set(setA):
-    current_node = setA.root
-    while(current_node.parent != None):
-        current_node = current_node.parent
-    return current_node
+    return path_compression_heuristic(setA.root)
+
+
 
 def union(setA,setB):
-    a = setA.get_set()
-    b = setB.get_set()
-    b.parent = a
+    a = get_set(setA)
+    b = get_set(setB)
+    if b != a:
+        b.parent = a
 
 def MSTKruskal(graph):
     nodes = {}
