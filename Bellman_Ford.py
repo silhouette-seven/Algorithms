@@ -45,11 +45,18 @@ def sssp_bellman_ford(graph,source,destination):
             print_path(destination.parent)
             print(' -> ',destination.val,end = '')
 
-
+    
     for _ in range(graph.vertex_count):
         for i in extended_vertices_dict.values():
             for j in i.adj_list:
                 relax((i,extended_vertices_dict[j[0].val],j[1]))
+
+    #checking for negative cycles
+    for i in extended_vertices_dict.values():
+        for j in i.adj_list:
+            if extended_vertices_dict[j[0].val].d > i.d + j[1]:
+                print('Negative Cycle Found!')
+                return False 
     print(f'shortest_distance to {destination.val} = {extended_vertices_dict[destination.val].d}')
     print_path(extended_vertices_dict[destination.val])
         
